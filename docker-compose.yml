@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - pg-data:/var/lib/postgresql/data
+    #   - pg-conf:/etc/postgresql
+    #   - pg-log:/var/log/postgresql
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_DB=${POSTGRES_NAME}
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    # volumes:
+    #   - redis-data:/data
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 8000:8000
+    environment:
+      - UWSGI_PY_AUTORELOAD=1
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_SERVICE_HOST=${POSTGRES_SERVICE_HOST}
+      - POSTGRES_SERVICE_PORT=${POSTGRES_SERVICE_PORT}
+      # - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      # - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    container_name: frontend
+    restart: on-failure
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/frontend #/:rw
+    depends_on:
+      - backend
+      - postgres
+
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: celery -A backend worker -l INFO
+    restart: on-failure
+    volumes:
+      - ./backend:/backend
+    env_file:
+      - .env
+    depends_on:
+      - backend
+      - redis
+      - postgres
+
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: celery -A backend beat -l INFO
+    volumes:
+      - ./backend:/backend
+    env_file:
+      - .env
+    depends_on:
+      - backend
+      - redis
+      - postgres
+    # volumes:
+    #   pg-data:
+    #   pg-conf:
+    #   pg-log:
+    #   redis-data:
