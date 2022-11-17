@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <AppHeader title="World Stock Info" />
+    <NavbarObj />
+    <div class="alert alert-info" v-if="isBusy">Loading...</div>
+    <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <router-view></router-view>
     <AppFooter />
   </div>
@@ -9,8 +12,11 @@
 <script>
 // import axios from 'axios';
 
-import AppHeader from './components/AppHeader'
-import AppFooter from './components/AppFooter'
+import AppHeader from './components/AppHeader';
+import AppFooter from './components/AppFooter';
+import NavbarObj from './components/NavbarObj';
+import store from "./store";
+import { computed } from "vue";
 
 
 
@@ -18,8 +24,17 @@ export default {
   name: 'App',
   components: {
     AppHeader,
+    NavbarObj,
     AppFooter,
   },
+  setup() {
+    return {
+      isBusy: computed(() => store.state.isBusy),
+      error: computed(() => store.state.error),
+      isAuthenticated: computed(() => store.getters.isAuthenticated),
+      onLogout: () => store.dispatch("logout")
+    }
+  }
 }
 </script>
 
@@ -72,5 +87,16 @@ body {
 .btn-block {
   display: block;
   width: 100%;
+}
+.alert {
+  position:relative;
+  text-align: center;
+  margin: 15px auto;
+  background: #1f1f1f;
+  color: #ff0000;
+  overflow: auto;
+  border: 2px solid #b44646;
+  padding: 30px;
+  border-radius: 5px;
 }
 </style>

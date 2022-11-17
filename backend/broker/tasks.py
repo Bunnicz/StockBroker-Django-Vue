@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
-from typing import Callable
+# from typing import Callable
 
 from bs4 import BeautifulSoup
 import urllib.request

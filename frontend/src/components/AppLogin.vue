@@ -1,12 +1,12 @@
 <template>
     <form @submit="onSubmit" class="add-form">
         <div class="form-control">
-            <label>Login</label>
-            <input type="login" v-model="login" name="login" placeholder="Login" required/>
+            <label>Email</label>
+            <input type="email" v-model="email" name="email" placeholder="user@example.com" required/>
         </div>
         <div class="form-control">
             <label>Password</label>
-            <input type="password" v-model="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required/>
+            <input type="password" v-model="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" minlength="8" required/>
         </div>
     
         <input type="submit" value="Login" class="btn btn-block" />
@@ -23,31 +23,22 @@ export default {
     name: 'AppLogin',
     data() {
         return {
-            login: '',
+            email: '',
             password: '',
         }
     },
+    emits: ['login-user'],
     methods: {
         onSubmit(e) {
             e.preventDefault()
 
-            // simple validation
-            if (!this.login) {
-                alert('No username provided')
-                return
-            }
-            if (!this.password) {
-                alert('No password provided')
-                return
-            }
-
             const loginUser = {
-                login: this.login,
+                email: this.email,
                 password: this.password,
             }
-            this.$emit('loginUser', loginUser)
+            this.$emit('login-user', loginUser)
             // Form clear
-            this.login = ''
+            this.email = ''
             this.password = ''
         }
     }

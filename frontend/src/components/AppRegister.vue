@@ -1,23 +1,27 @@
 <template>
     <form @submit="onSubmit" class="add-form">
         <div class="form-control">
+            <label>Email</label>
+            <input type="email" v-model="email" name="email" placeholder="user@example.com" required />
+        </div>
+        <div class="form-control">
             <label>Username</label>
-            <input type="login" v-model="login" name="login" placeholder="Login" required />
+            <input type="login" v-model="username" name="username" placeholder="Username" required />
         </div>
         <div class="form-control">
             <label>Password</label>
-            <input type="password" v-model="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required />
+            <input type="password" v-model="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" minlength="8" required />
         </div>
         <div class="form-control">
             <label>Confirm Password</label>
-            <input type="password" v-model="confirm_password" name="confirm_password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required />
+            <input type="password" v-model="confirm_password" name="confirm_password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" minlength="8" required />
         </div>
 
-        <input type="submit" value="Login" class="btn btn-block" />
+        <input type="submit" value="Register" class="btn btn-block" />
     </form>
     <div class="auth__action">
         <p>Already signed up?</p>
-        <router-link to="/">Login</router-link>
+        <router-link to="/login">Login</router-link>
     </div>
 </template>
 
@@ -26,33 +30,35 @@ export default {
     name: 'AppRegister',
     data() {
         return {
-            login: '',
+            email: '',
+            username: '',
             password: '',
-            confirmPassword: '',
+            confirm_password: '',
         }
     },
+    emits: ['register-user'],
     methods: {
         onSubmit(e) {
             e.preventDefault()
 
             // simple validation
-            if (!this.login) {
-                alert('No username provided')
-                return
-            }
-            if (!this.password) {
-                alert('No password provided')
+            if (this.password !== this.confirm_password) {
+                alert('Passwords do not match')
                 return
             }
 
-            const loginUser = {
-                login: this.login,
+            const registerUser = {
+                email: this.email,
+                username: this.username,
                 password: this.password,
+                // confirm_password: this.confirm_password,
             }
-            this.$emit('loginUser', loginUser)
+            this.$emit('register-user', registerUser)
             // Form clear
-            this.login = ''
+            this.email = ''
+            this.username = ''
             this.password = ''
+            this.confirm_password = ''
         }
     }
 }

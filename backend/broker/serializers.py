@@ -1,14 +1,13 @@
-# from django.contrib.auth.models import User, Group
 # from rest_framework import serializers
 
 
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['url', 'username', 'email', 'groups']
+# class StockListSerializer(serializers.ListSerializer ):
+#     name = serializers.CharField(max_lenght=10)
+#     value = serializers.CharField(max_lenght=10)
+#     change = serializers.CharField(max_lenght=10)
+#     date = serializers.CharField(max_lenght=10)
 
 
-# class GroupSerializer(serializers.HyperlinkedModelSerializer):
+# class StockDataSerializer(serializers.BaseSerializer):
 #     class Meta:
-#         model = Group
-#         fields = ['url', 'name']
+#         list_serializer_class = StockListSerializer

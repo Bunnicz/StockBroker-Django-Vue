@@ -1,14 +1,12 @@
 <template>
-  <AppLogin />
+  <div class="content">
+    <h3>Welcome to our website.</h3>
+    <h4>Please login or register.</h4>
+  </div>
 </template>
 
 <script>
-import AppLogin from '../components/AppLogin'
-
 export default {
   name: 'HomeView',
-  components: {
-    AppLogin,
-  }
 }
 </script>
