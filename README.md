@@ -1,12 +1,19 @@
 ## Project Overview
 
-Used technologies:
-Backend: Django
-Frontend: VueJS
-DB: PostgreSQL
-Other:
-- Celery
-- Redis
+Simple Fullstack App using Django and VueJS with user login/register page, which displays world stock data after user authentication with JWT. Stock Data is fetched every 5 secounds from outside service and cached to redis (noSQL) DB for fast procesing.
+
+
+### Used technologies:
+
+- **Backend**: Django
+
+- **Frontend**: VueJS
+
+- **DataBase**: PostgreSQL
+
+- Other:
+  - **Distributed Task Queue**: Celery
+  - **Cache Database/Message Broker**: Redis
 
 ## Local Development
 
