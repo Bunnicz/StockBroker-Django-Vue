@@ -26,3 +26,18 @@ docker-compose up
 Open `http://localhost` in your browser.
 
 You can specify environment variables for docker-compose by adding an `.env` file to the root of the project based on `.env.template`.
+
+Connect to "Backend" container, make migration for DB and create super user:
+
+```sh
+docker exec -it Backend bash
+python manange.py migrate
+python manange.py createsuperuser --email admin@example.com --username admin
+```
+
+## To Do:
+
+- [ ] JWT refresh implementation. Currently after token expiration user gets logged out.
+- [ ] isAuthenticated bug fix. Currently dosen't hide Login/Register buttons when logged in. In progress...
+- [ ] Frontend client beautification. 
+- [ ] Frontend standarization
